@@ -1,6 +1,7 @@
+# Store responses in a yaml file for easy human interaction
+
 import sys
 import socket
-#import string
 
 HOST="irc.freenode.net"
 PORT=6667
