@@ -1,0 +1,14 @@
+# reply to commands badly issued (i.e. no "please")
+badcommand:
+    - "oi, don't order me around"
+    - "say please, is that too much to ask?"
+    - "if you ask friendly, I may do what you ask for"
+    - "you didn't say the magic word"
+    - "try it again, this time say please"
+
+commands:
+    - "yes, master"
+    - "standing to attention, SIR!"
+    - "Sire?"
+    - "you calleth?"
+    - "jawohl!"

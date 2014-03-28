@@ -1,14 +1,19 @@
-# Store responses in a yaml file for easy human interaction
+#!/usr/bin/env python
 
 import sys
 import socket
+import yaml
+from random import choice
 
-HOST="irc.freenode.net"
-PORT=6667
-CHANNEL='#test4notbot'
-NICK="notbot"
-IDENT="notbot"
-REALNAME="NotBot"
+HOST = "irc.bne.redhat.com"
+PORT = 6667
+CHANNEL = '#test4notbot'
+NICK = "notbot"
+IDENT = "notbot"
+REALNAME = "NotBot"
+SOURCEFILE = "voice.yaml"
+
+voice = yaml.load(open(SOURCEFILE))
 
 s = socket.socket()
 s.connect((HOST, PORT))
@@ -21,17 +26,11 @@ while True:
    data = s.recv (1024)
    if data.find('PING') != -1:
       s.send('PONG ' + data.split()[1] + '\r\n')
-   if data.find('!notbot quit') != -1:
-      s.send("PRIVMSG %s :Fine, if you don't want me here, I'll go where I'm appreciated.\r\n" % CHANNEL)
-      s.send('QUIT\r\n')
-      sys.exit()
-   if data.find('hi notbot' ) != -1:
-      s.send('PRIVMSG %s :I already said hi...\r\n' % CHANNEL)
-   if data.find('hello notbot' ) != -1:
-      s.send('PRIVMSG %s :I already said hi...\r\n' % CHANNEL)
-   if data.find('KICK') != -1:
-      s.send ('JOIN %s\r\n' % CHANNEL)
-   if data.find('cheese') != -1:
-      s.send('PRIVMSG %s :Cheese? WHERE?!?!?!?!?!\r\n' % CHANNEL)
-   if data.find('slaps notbot') != -1:
-      s.send('PRIVMSG %s :That was totally unnecessary!\r\n' % CHANNEL)
+   elif data.find(NICK):
+      for command in voice:
+         if data.find(command) != -1:
+            response = voice[command][0]
+            s.send('PRIVMSG %s :%s\r\n' % (CHANNEL, response))
+   
+   # need to account for invalid commands
+   # s.send('PRIVMSG %s :Unknown command\r\n' % (CHANNEL))
