@@ -7,7 +7,7 @@ from random import choice
 
 HOST = "irc.bne.redhat.com"
 PORT = 6667
-CHANNEL = '#test4bot'
+CHANNEL = '#openshift-docs'
 NICK = "notbot"
 IDENT = "notbot"
 REALNAME = "NotBot"
@@ -26,6 +26,10 @@ while True:
     data = s.recv (1024)
     if data.find('PING') != -1:
         s.send('PONG ' + data.split()[1] + '\r\n')
+    elif data.find('brice') != -1 and data.find('PRIVMSG') != -1:
+        print data
+        response = choice(voice['brice'])
+        s.send('PRIVMSG %s :%s\r\n' % (CHANNEL, response))
     elif data.find(NICK) != -1 and data.find('PRIVMSG') != -1:
         print data
         found = False
