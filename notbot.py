@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import sys
 import socket
 import yaml
 from random import choice
@@ -23,15 +22,15 @@ s.send("JOIN %s\r\n" % CHANNEL)
 s.send("PRIVMSG %s :Hi everybody!  No way I'm not a notbot.\r\n" % CHANNEL)
 
 while True:
-    data = s.recv (1024)
+    data = s.recv(1024)
     if data.find('PING') != -1:
         s.send('PONG ' + data.split()[1] + '\r\n')
     elif data.find('brice') != -1 and data.find('PRIVMSG') != -1:
-        print data
+        print(data)
         response = choice(voice['brice'])
         s.send('PRIVMSG %s :%s\r\n' % (CHANNEL, response))
     elif data.find(NICK) != -1 and data.find('PRIVMSG') != -1:
-        print data
+        print(data)
         found = False
         for command in voice:
             if data.find(command) != -1:
@@ -40,6 +39,7 @@ while True:
                 s.send('PRIVMSG %s :%s\r\n' % (CHANNEL, response))
                 if command == 'quit' or command == 'bye':
                     s.close()
-        if found == False: # need to account for invalid commands without spamming the list
+        if found is False:
+            # need to account for invalid commands without spamming the list
             response = choice(voice['badcommand'])
             s.send('PRIVMSG %s :%s\r\n' % (CHANNEL, response))
